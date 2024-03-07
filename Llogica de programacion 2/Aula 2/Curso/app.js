@@ -1,21 +1,62 @@
-//El document es una documento de objetos de lo que se muestra en la pantalla
-//Estamos seleccionando el titulo y guardándolo en una variable llamada 'titulo'
-let titulo = document.querySelector('h1');
-
-//Con inertHTML podemos asignarle un texto
-titulo.innerHTML = 'Juego del número secreto';
-
-let parrafo = document.querySelector('.texto__parrafo');
-parrafo.innerHTML = 'Indica un número del 1 al 10';
+let numeroSecreto = generarNumeroSecreto();
+let contador = 1;
+console.log("Número secreto: " + numeroSecreto);
 
 
-//Estructura base de una función 
-function intentoUsuario() {
-    console.log("Mira mama estoy programando")
-};
-
-function asignarTextoAElemento(elemento, texto) {
+function asignarTextoElemento(elemento, texto) {
     let titulo = document.querySelector(elemento);
     titulo.innerHTML = texto;
+}
+
+mensajesIniciales();
+
+function generarNumeroSecreto() {
+    //Se usa la función random de math para generar un número aleatorio
+    //Esta función genera un número decimal, se multiplica por 10 y se usa una función para redondear
+    return (Math.floor(Math.random() * 10) + 1);
+
+}
+
+
+function verificarIntento() {
+
+    let numeroDeUsuario = parseInt(document.getElementById('valorUsuario').value);
+
+    if (numeroDeUsuario == numeroSecreto) {
+        asignarTextoElemento('.texto__parrafo', `Acertaste el número secreto en ${contador} ${(contador > 1) ? 'veces' : 'vez'}`);
+        document.getElementById("reiniciar").removeAttribute('disabled')
+    } else {
+        if (numeroSecreto > numeroDeUsuario) {
+            asignarTextoElemento('.texto__parrafo', `El número secreto es mayor`);
+        }
+        else {
+            asignarTextoElemento('.texto__parrafo', `El número secreto es menor`);
+
+        }
+        contador++;
+        limpiarCaja("valorUsuario");
+    }
+    return;
+
+}
+
+function limpiarCaja(elemento) {
+
+    document.getElementById(elemento).value = '';
+}
+
+function mensajesIniciales() {
+    asignarTextoElemento('h1', "Juego del número secreto!");
+    asignarTextoElemento('.texto__parrafo', "Indica un número del 1 al 10");
+}
+
+function reiniciarJuego() {
+    console.log("Hola")
+    limpiarCaja("valorUsuario")
+    contador = 1;
+    numeroSecreto = generarNumeroSecreto();
+    console.log("Número secreto: " + numeroSecreto);
+    mensajesIniciales();
+    document.getElementById("reiniciar").setAttribute('disabled', 'true');
 
 }
